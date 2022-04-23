@@ -1,3 +1,4 @@
-http://localhost:8080/publicUsers/admin
+http://localhost:8080/publicUsers/
 
+###
 GET http://localhost:8080/publicUsers/admin
