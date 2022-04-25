@@ -1,50 +1,99 @@
 var express = require("express")
 var router = express.Router()
 var userService = require("./UserService")
-// TODO:
-// server mit monbodb verbinden
 
-router.get('/', (req, res) => {
-    userService.getUsers(function(err, result){
-        console.log("requesting all users Result: " + result)
-        if(result){
-            res.send(Object.values(result))
-        } else {
-            res.send("Es gab Probleme")
-        }
+// Read all
+router.get("/", (req, res) => {
+    userService.getUsers((err, result) => {
+        if(err){
+            res.status(500).json({"Error": err})
+        } else if(result){
+                res.status(200).json(result)
+            } else {
+                res.status(500).json({"Error": "Something went wrong"})
+            }
     })
 })
 
+// Read
 router.get("/:id", (req, res) => {
-    userService.findUserById(req.query.id, function(err, result){
-        console.log("finding specific user Result: " + result)
-        if(result){
-            res.send(Object.values(result))
+    userService.findUserById(req.params.id, (err, result) => {
+        if(err){
+            res.status(500).json({"Error": err})
+        } else if(result){
+            res.status(200).json(result)
         } else {
-            res.send("Dieser Benutzer wurde nicht gefunden")
+            res.status(404).json({"Error": "User with given userID does not exist"})
         }
     })
 })
 
-router.post('/', (req, res, next) => {
-    userService.addUser(req, function(err, result){
-        if(result){
-            res.send("Benutzer erfolgreich angegelegt")
+// Create
+router.post("/", (req, res) => {
+    if(!req.body.userID){
+        res.status(400).json({"Error": "Missing userID"})
+        return
+    }
+    
+    userService.findUserById(req.body.userID, (err, resultA) => {
+        if(err){
+            res.status(500).json({"Error": err})
+        } else if(resultA){
+            res.status(400).json({"Error": "A user with the given userID already exists"})
         } else {
-            res.send("Es gab Probleme")
+            userService.addUser(req, (error, resultB) => {
+                if(error){
+                    res.status(500).json({"Error": error})
+                } else if(resultB){
+                    res.status(201).json({"Success": "User succesfully created"})
+                } else {
+                    res.status(500).json({"Error": "User creation failed"})
+                }
+            })
         }
     })
 })
 
-router.put('/:id', (req, res, next) => {
-    // versuche einen neuen User zur DB hinzuzufügen
+// Update
+router.put("/:id", (req, res) => {
+    if(!req.body){
+        res.status(400).json({"Error": "Missing user data"})
+        return
+    }
+
+    userService.findUserById(req.params.id, (err, doc) => {
+        if(err){
+            res.status(500).json({"Error": err})
+        } else if(!doc){
+            res.status(404).json({"Error": "User with given userID does not exist"})
+        } else {
+            userService.updateUser(doc, req, (err, result) => {
+                if (err){
+                    res.status(500).json({"Error": err})
+                } else if (result){
+                    res.status(202).json({"Success": "User succesfully updated"})
+                } else {
+                    res.status(500).json({"Error": "User update failed"})
+                }
+            })
+        }
+    })
+
+    
     
 })
 
+// Delete
 router.delete("/:id", (req, res) => {
-    // returne den user mit ID admin
-    //res.json({name: "Hallo Jason"})
-    //res.send(req.query.id);
+    userService.deleteUser(req.params.id, (err, result) => {
+        if (err){
+            res.status(500).json({"Error": error})
+        } else if (result) {
+            res.status(202).json({"Success": "User succesfully deleted"})
+        } else {
+            res.status(404).json({"Error": "User with given userID does not exist"})
+        }
+    })
 })
 
 module.exports = router;

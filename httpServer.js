@@ -1,7 +1,6 @@
 const express = require('express')
 const database = require("./database/db")
 const bodyParser = require("body-parser")
-// const fileUpload = require("express-fileupload")
 
 
 const publicUsersRoutes = require('./endpoints/publicUsers/publicUsersRoute')
@@ -12,7 +11,9 @@ app.use(bodyParser.json())
 app.use("/publicUsers", publicUsersRoutes)
 
 database.initDB(function(err, db){
-    if(db){
+    if (err){
+        console.log("Database error: ", err)
+    } else if(db){
         console.log("Database started...")
     } else {
         console.log("Failed to start database")

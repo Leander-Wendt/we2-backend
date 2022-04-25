@@ -1,0 +1,14 @@
+###
+http://localhost:8080/publicUsers/
+
+###
+GET http://localhost:8080/publicUsers/admin
+
+###
+DELETE  http://localhost:8080/publicUsers/manfred
+
+###
+DELETE  http://localhost:8080/publicUsers/admin
+
+###
+DELETE  http://localhost:8080/publicUsers/
