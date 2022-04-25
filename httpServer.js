@@ -1,5 +1,5 @@
 const express = require('express')
-// const database = require("./database/db")
+const database = require("./database/db")
 const bodyParser = require("body-parser")
 // const fileUpload = require("express-fileupload")
 
@@ -10,6 +10,14 @@ const app = express()
 app.use(bodyParser.json())
 
 app.use("/publicUsers", publicUsersRoutes)
+
+database.initDB(function(err, db){
+    if(db){
+        console.log("Database started...")
+    } else {
+        console.log("Failed to start database")
+    }
+})
 
 // Error Handlong
 app.use(function(req, res, next){

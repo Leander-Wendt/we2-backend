@@ -17,7 +17,7 @@ router.post('/', (req, res, next) => {
 router.get("/:id", (req, res) => {
     // returne den user mit ID admin
     //res.json({name: "Hallo Jason"})
-    res.send(req.params.id);
+    res.send(req.query.id);
 })
 
 module.exports = router;
