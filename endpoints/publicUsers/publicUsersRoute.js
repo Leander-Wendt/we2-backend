@@ -27,8 +27,13 @@ router.get("/:id", (req, res) => {
 })
 
 router.post('/', (req, res, next) => {
-    // versuche einen neuen User zur DB hinzuzufügen
-    
+    userService.addUser(req, function(err, result){
+        if(result){
+            res.send("Benutzer erfolgreich angegelegt")
+        } else {
+            res.send("Es gab Probleme")
+        }
+    })
 })
 
 router.put('/:id', (req, res, next) => {

@@ -32,11 +32,11 @@ function findUserById(searchUserId, callback){
             return callback("No user with following userID: " + searchUserId, null)
         } else {
             if(user){
-                logger.debug("Found userID: " + searchUserId)
+                //logger.debug("Found userID: " + searchUserId)
                 callback(null, user)
             } else {
                 if ("admin" == searchUserId){
-                    logger.debug("No admin account exists. Create it with deafault password")
+                    //logger.debug("No admin account exists. Create it with deafault password")
                     var adminUser = new User()
                     adminUser.userID = "admin"
                     adminUser.password = "123"
@@ -58,7 +58,8 @@ function findUserById(searchUserId, callback){
 
 function addUser(req, callback){
     console.log("Adding new User...")
-    if(findUserById(req.body.userID) != null){
+    // hier fehlt 2.param als callback
+    if(findUserById(req.body.userID, function(){}) != null){
         callback("User mit gewählter ID existiert bereits.", null)
     } else {
         const tempUser = new User ({
