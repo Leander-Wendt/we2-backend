@@ -1,7 +1,6 @@
 {
   "name": "uebung1",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -11,10 +10,25 @@
   "author": "Leander Wendt",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.0",
     "config": "^3.3.7",
     "express": "^4.17.3",
-    "mongoose": "^6.3.1"
-  }
+    "mongoose": "^6.3.1",
+    "nodemon": "^2.0.15",
+    "winston": "^3.7.2"
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Leander-Wendt/Uebung1.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Leander-Wendt/Uebung1/issues"
+  },
+  "homepage": "https://github.com/Leander-Wendt/Uebung1#readme",
+  "description": ""
 }

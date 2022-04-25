@@ -1,11 +1,10 @@
-/*var express = require("express")
+var express = require("express")
 var router = express.Router()
+var User = require("./UserModel")
 
-var User = require("./UserModel")*/
-
-var mongoose = require('mongoose');
-const UserSchema = require('./UserModel');
-var User = mongoose.model('User', UserSchema);
+//var mongoose = require('mongoose');
+//const UserSchema = require('./UserModel');
+//var User = mongoose.model('User', UserSchema);
 
 function getUsers(callback){
     User.find(function(err, users){
@@ -14,6 +13,7 @@ function getUsers(callback){
             return callback(err, null)
         } 
         console.log("returning all users...")
+        console.log(users, typeof users)
         return callback(null, users)
     })
 }
@@ -56,7 +56,32 @@ function findUserById(searchUserId, callback){
     })
 }
 
+function addUser(req, callback){
+    console.log("Adding new User...")
+    if(findUserById(req.body.userID) != null){
+        callback("User mit gewählter ID existiert bereits.", null)
+    } else {
+        const tempUser = new User ({
+            id: req.body.id,
+            userID: req.body.userID,
+            userName: req.body.userName,
+            password: req.body.password,
+            isAdministrator: req.body.isAdministrator
+        }).save()
+        callback(null, tempUser)
+    }    
+}
+
+// param changes must be json
+/*function updateUser(searchUserId, changes, callback){
+    const doc = Person.findOne({ searchUserId });
+
+    // Sets `name` and unsets all other properties
+    doc.overwrite(changes);
+    doc.save();
+}*/
 module.exports = {
     getUsers,
-    findUserById
+    findUserById,
+    addUser
 }
