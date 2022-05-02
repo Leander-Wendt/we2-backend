@@ -4,11 +4,15 @@ const bodyParser = require("body-parser")
 
 
 const publicUsersRoutes = require('./endpoints/publicUsers/publicUsersRoute')
+const UserRoutes = require('./endpoints/user/UserRoute')
+const authenticationRoutes = require('./endpoints/authenticate/AuthRoute')
 
 const app = express()
 app.use(bodyParser.json())
 
 app.use("/publicUsers", publicUsersRoutes)
+app.use("/authenticate", authenticationRoutes)
+app.use("/users", UserRoutes)
 
 database.initDB(function(err, db){
     if (err){
