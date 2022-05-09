@@ -24,7 +24,7 @@ function createDefaultAdmin(callback){
 }
 
 function getUsers(callback){
-    User.find({ password: 0},function(err, users){
+    User.find(function(err, users){
         if(err) {
             console.log("Error while searching: " + err)
             return callback(err, null)
@@ -49,7 +49,7 @@ function findUserById(searchUserId, callback){
             if(user){
                 console.log("Found userID: " + searchUserId)
                 callback(null, user)
-            } else {                
+            } else {
                 callback(null, null)
             }
         }

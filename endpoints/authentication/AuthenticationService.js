@@ -22,10 +22,8 @@ function createSessionToken(props, callback){
                     callback(err, null)
                 } else {
                     console.log("Correct password, creating token...")
-                    var issuedAt = new Date().getTime()
-                    var expirationTime = config.get("session.timeout")
                     var privateKey = config.get("session.tokenKey")
-                    let token = jwt.sign({"user": user.userID}, privateKey, {expiresIn: expirationTime, algorithm: "HS256"})
+                    let token = jwt.sign({"userID": user.userID, "username": user.username, "isAdmin": user.isAdmin}, privateKey, {expiresIn: "1h", algorithm: "HS256"})
 
                     console.log("Token created: " + token)
                     callback(null, token, user)

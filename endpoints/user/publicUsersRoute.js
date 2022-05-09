@@ -1,6 +1,6 @@
 var express = require("express")
 var router = express.Router()
-var userService = require("./UserService")
+var userService = require("./PublicUserService")
 
 // Read all
 router.get("/", (req, res) => {
