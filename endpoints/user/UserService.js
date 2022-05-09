@@ -2,6 +2,27 @@ var express = require("express")
 var router = express.Router()
 var User = require("./UserModel")
 
+function createDefaultAdmin(callback){
+    findUserById("admin", (err, user) => {
+        if (!err && !user){
+            console.log("Creating default admin ...")
+            var adminUser = new User()
+                adminUser.userID = "admin"
+                adminUser.password = "123"
+                adminUser.username = "Default Administrator Account"
+                adminUser.isAdmin = true
+                adminUser.save(function(err){
+                    if(err){
+                        console.log("Could not create default admin account: " + err)
+                        callback("Could not login into admin account", null)
+                    } else {
+                        callback(null, adminUser)
+                    }
+                    })
+        }
+    })
+}
+
 function getUsers(callback){
     User.find(function(err, users){
         if(err) {
@@ -100,5 +121,6 @@ module.exports = {
     findUserById,
     addUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    createDefaultAdmin
 }

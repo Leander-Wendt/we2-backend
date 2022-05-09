@@ -24,13 +24,15 @@ database.initDB(function(err, db){
         console.log("Database error: ", err)
     } else if(db){
         console.log("Database connection established...")
+        UserService.createDefaultAdmin((err, admin) => {
+            if(admin){
+                console.log("Default admin succesfully created!")
+            }
+        })
     } else {
         console.log("Failed to connect to the database")
     }
 })
-
-// Init vom Standardadmin
-UserService.findUserById("admin", () => {});
 
 // Error Handling
 app.use(function(req, res, next){
