@@ -45,3 +45,6 @@ GET http://localhost:8080/publicUsers
 // Lösche den User mit der User-ID manfred
 ###
 DELETE  http://localhost:8080/publicUsers/manfred
+
+###
+DELETE  http://localhost:8080/publicUsers/admin

@@ -1,5 +1,3 @@
-var express = require("express")
-var router = express.Router()
 var User = require("./UserModel")
 
 function createDefaultAdmin(callback){
@@ -9,8 +7,8 @@ function createDefaultAdmin(callback){
             var adminUser = new User()
                 adminUser.userID = "admin"
                 adminUser.password = "123"
-                adminUser.username = "Default Administrator Account"
-                adminUser.isAdmin = true
+                adminUser.userName = "Default Administrator Account"
+                adminUser.isAdministrator = true 
                 adminUser.save(function(err){
                     if(err){
                         console.log("Could not create default admin account: " + err)
@@ -24,14 +22,14 @@ function createDefaultAdmin(callback){
 }
 
 function getUsers(callback){
-    User.find({ password: 0},function(err, users){
+    User.find(function(err, users){
         if(err) {
             console.log("Error while searching: " + err)
             return callback(err, null)
         } 
         console.log("returning all users...")
         return callback(null, users)
-    })
+    }).select("-password -_id -__v -updatedAt -createdAt")
 }
 
 function findUserById(searchUserId, callback){
@@ -40,7 +38,29 @@ function findUserById(searchUserId, callback){
         callback("UserID is missing", null)
         return;
     }
-    var query = User.findOne({userID: searchUserId})
+    var query = User.findOne({userID: searchUserId}).select("-password -_id -__v -updatedAt -createdAt")
+    query.exec(function(err, user){
+        if(err){
+            console.log("No user with following userID: " + searchUserId)
+            return callback("No user with following userID: " + searchUserId, null)
+        } else {
+            if(user){
+                console.log("Found userID: " + searchUserId)
+                callback(null, user)
+            } else {                
+                callback(null, null)
+            }
+        }
+    })
+}
+
+function privateFindUserById(searchUserId, callback){
+    console.log("UserService: find User by ID: " + searchUserId)
+    if(!searchUserId){
+        callback("UserID is missing", null)
+        return;
+    }
+    var query = User.findOne({userID: searchUserId}).select("-_id -__v -updatedAt -createdAt")
     query.exec(function(err, user){
         if(err){
             console.log("No user with following userID: " + searchUserId)
@@ -64,6 +84,7 @@ function addUser(req, callback){
         password: req.body.password,
         isAdministrator: req.body.isAdministrator
     })
+    console.log("to save pw: ", doc.password)
         doc.save((err, result) => {
             if (err){
                 callback(err, result)
@@ -105,5 +126,6 @@ module.exports = {
     addUser,
     updateUser,
     deleteUser,
-    createDefaultAdmin
+    createDefaultAdmin,
+    privateFindUserById
 }

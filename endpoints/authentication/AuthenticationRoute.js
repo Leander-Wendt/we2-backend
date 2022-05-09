@@ -1,4 +1,4 @@
-    var express = require("express")
+var express = require("express")
 var router = express.Router()
 
 var authenticationService = require("./AuthenticationService")
@@ -21,20 +21,17 @@ router.get("/", function(req, res, next){
 
         authenticationService.createSessionToken([username, password], function(err, token, user){
             if(token){
-                res.header("Authorisation", "Bearer " + token)
+                res.header("Authorization", "Bearer " + token)
 
                 if(user){
-                    const{id, userID, userName, ...partialObject} = user;
-                    const subset = {id, userID, userName}
-                    console.log(JSON.stringify(subset))
-                    res.status(200).send(subset)
+                    res.status(200).json({Success: "Token succesfuly created"})
                 } else {
                     console.log("User is null, even though a token has been created. Error: " + err)
-                    res.status(200).send("Token succesfully created")
+                    res.status(200).json({Success: "Token succesfully created"})
                 }
             } else {
                 console.log("Token has not been created, Error: " + err)
-                res.status(400).send("Could not create token")
+                res.status(401).json({Error: "Could not create token: Authentication failed"})
             }
         })
     }

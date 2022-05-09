@@ -7,7 +7,7 @@ const publicUsersRoutes = require('./endpoints/user/publicUsersRoute')
 const UserRoutes = require('./endpoints/user/UserRoute')
 const UserService = require('./endpoints/user/UserService')
 const authenticationRoutes = require('./endpoints/authentication/AuthenticationRoute')
-//const ForumThreadRoutes = require('./endpoints/forumThread/ForumThreadRoutes')
+const ForumThreadRoutes = require('./endpoints/forumThread/ForumThreadRoutes')
 //const ForumMessagesRoutes = require('./endpoints/forumMessage/ForumMessageRoutes')
 
 const app = express()
@@ -16,7 +16,7 @@ app.use(bodyParser.json())
 app.use("/publicUsers", publicUsersRoutes)
 app.use("/authenticate", authenticationRoutes)
 app.use("/users", UserRoutes)
-//app.use("/forumThreads", ForumThreadRoutes)
+app.use("/forumThreads", ForumThreadRoutes)
 //app.use("/forumMessages", ForumMessagesRoutes)
 
 database.initDB(function(err, db){

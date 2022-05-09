@@ -2,6 +2,12 @@
 ###
 http://localhost:8080/publicUsers
 
+###
+http://localhost:8080/forumThreads
+
+###
+DELETE http://localhost:8080/publicUsers/admin
+
 
 // Login mit Basic Authentication als admin mit korrekten Credentials admin:123
 ###
@@ -23,6 +29,13 @@ http://localhost:8080/users
 http://localhost:8080/users
 Authorization: {{adminToken}}
 
+###
+http://localhost:8080/users/admin
+Authorization: {{adminToken}}
+
+###
+http://localhost:8080/users/admin
+
 ### Lege neuen user manfred an
 POST http://localhost:8080/users
 Authorization: {{adminToken}}
@@ -33,6 +46,10 @@ Content-Type: application/json
     "userName": "Manfred Mustermann",
     "password": "asdf"
 }
+
+###
+DELETE  http://localhost:8080/users/manfred
+Authorization: {{adminToken}}
 
 ### Abrufen des angelegten Users mit dem Admin-Token
 GET http://localhost:8080/users/manfred

@@ -19,9 +19,6 @@ UserSchema.methods.whoAmI = function () {
 
 UserSchema.pre('save', function (next) {
     var user = this
-
-    console.log("Pre-save: " + this.password)
-
     if (!user.isModified('password')) { return next() };
     bcrypt.hash(user.password, 10).then((hashedPassword) => {
         user.password = hashedPassword;
