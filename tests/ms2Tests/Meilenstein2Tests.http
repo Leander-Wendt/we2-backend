@@ -83,6 +83,17 @@ Content-Type: application/json
 }
 
 ###
+# @name createForumRequest
+POST http://localhost:8080/forumThreads
+Authorization: {{manfredToken}}
+Content-Type: application/json
+
+{
+    "name": "Mein erstes Forum",
+    "description": "Das ist ein erstes Forum, das ich im Rahmen der Tests angelegt habe"
+}
+
+###
 @forumThreadID = {{createForumRequest.response.body._id}}
 
 ### Auflisten aller Foren ohne Token, nun sollte es ein Forum geben
@@ -107,6 +118,9 @@ Authorization: {{adminToken}}
 
 ### Auflisten der Foren einen bestimmten user
 GET http://localhost:8080/forumThreads?ownerID=manfred
+
+### Auflisten der Foren einen bestimmten user
+GET http://localhost:8080/forumThreads?ownerID=admin
 
 
 ### Lösche den angelegten Forum-Thread

@@ -18,6 +18,9 @@ Content-Type: application/json
 ###
 GET http://localhost:8080/publicUsers/admin 
 
+###
+DELETE http://localhost:8080/publicUsers/admin 
+
 // Lege zweiten User an. Prüfe UserID und UserName, ob die Angaben korrekt sind.
 ###
 POST http://localhost:8080/publicUsers

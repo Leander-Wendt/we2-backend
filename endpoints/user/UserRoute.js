@@ -42,12 +42,11 @@ router.post("/", util.isAuthorized, (req, res) => {
         } else if(resultA){
             res.status(400).json({"Error": "A user with the given userID already exists"})
         } else {
-            console.log("req:", req)
             userService.addUser(req, (error, resultB) => {
                 if(error){
                     res.status(500).json({"Error": error})
                 } else if(resultB){
-                    res.status(201).json({"Success": "User succesfully created"})
+                    res.status(201).json(resultB)
                 } else {
                     res.status(500).json({"Error": "User creation failed"})
                 }
@@ -73,7 +72,7 @@ router.put("/:id", util.isAuthorized, (req, res) => {
                 if (err){
                     res.status(500).json({"Error": err})
                 } else if (result){
-                    res.status(202).json({"Success": "User succesfully updated"})
+                    res.status(200).json(result)
                 } else {
                     res.status(500).json({"Error": "User update failed"})
                 }
@@ -91,7 +90,7 @@ router.delete("/:id", util.isAuthorized, (req, res) => {
         if (err){
             res.status(500).json({"Error": error})
         } else if (result) {
-            res.status(202).json({"Success": "User succesfully deleted"})
+            res.status(204).json({"Success": "User succesfully deleted"})
         } else {
             res.status(404).json({"Error": "User with given userID does not exist"})
         }

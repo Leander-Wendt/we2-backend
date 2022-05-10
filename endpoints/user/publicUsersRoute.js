@@ -41,11 +41,11 @@ router.post("/", (req, res) => {
         } else if(resultA){
             res.status(400).json({"Error": "A user with the given userID already exists"})
         } else {
-            userService.addUser(req, (error, resultB) => {
+            userService.addUser(req, (error, user) => {
                 if(error){
                     res.status(500).json({"Error": error})
-                } else if(resultB){
-                    res.status(201).json({"Success": "User succesfully created"})
+                } else if(user){
+                    res.status(201).json(user)
                 } else {
                     res.status(500).json({"Error": "User creation failed"})
                 }
@@ -67,11 +67,11 @@ router.put("/:id", (req, res) => {
         } else if(!doc){
             res.status(404).json({"Error": "User with given userID does not exist"})
         } else {
-            userService.updateUser(doc, req, (err, result) => {
+            userService.updateUser(doc, req, (err, user) => {
                 if (err){
                     res.status(500).json({"Error": err})
-                } else if (result){
-                    res.status(202).json({"Success": "User succesfully updated"})
+                } else if (user){
+                    res.status(200).json(user)
                 } else {
                     res.status(500).json({"Error": "User update failed"})
                 }

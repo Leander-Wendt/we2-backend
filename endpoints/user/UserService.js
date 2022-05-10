@@ -84,7 +84,6 @@ function addUser(req, callback){
         password: req.body.password,
         isAdministrator: req.body.isAdministrator
     })
-    console.log("to save pw: ", doc.password)
         doc.save((err, result) => {
             if (err){
                 callback(err, result)

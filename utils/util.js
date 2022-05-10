@@ -61,9 +61,10 @@ const isAdminOrOwner = (ownerID) => { return (req, res, next) => {
 }
 
 
-function readToken(token) {
+function readToken(req) {
+	let token = req.headers.authorization.split(" ")[1];
 	var privateKey = config.get('session.tokenKey');
-	jwt.verify(token, privateKey, { algorithm: "HS256" }, (err, user) => {
+	return jwt.verify(token, privateKey, { algorithm: "HS256" }, (err, user) => {
 		if (err) {
 			res.status(500).json({ error: "Not Authorized" });
 			return;

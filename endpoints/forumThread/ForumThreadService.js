@@ -1,4 +1,5 @@
 var Thread = require("./ForumThreadModel")
+var util = require("../../utils/util")
 
 function getThreads(callback){
     Thread.find(function(err, threads){
@@ -11,21 +12,44 @@ function getThreads(callback){
     })
 }
 
+function findUsersThread(req, callback){
+    user = util.readToken(req)
+    console.log("ThreadService: getting all Threads from User: " + user.userName)
+    if(!user){
+        callback("User is missing", null)
+        return;
+    }
+    var query = Thread.find({ownerID: user.userID})
+    query.exec(function(err, threads){
+        if(err){
+            console.log("No user with following userID: " + user.userID)
+            return callback("No user with following userID: " + user.userID, null)
+        } else {
+            if(threads){
+                console.log("Found threads by userID: " + user.userID)
+                callback(null, threads)
+            } else {                
+                callback(null, null)
+            }
+        }
+    })
+}
+
 function findThreadByUserId(searchUserId, callback){
     console.log("UserService: find User by ID: " + searchUserId)
     if(!searchUserId){
         callback("UserID is missing", null)
         return;
     }
-    var query = User.findOne({userID: searchUserId}).select("-password -_id -__v -updatedAt -createdAt")
-    query.exec(function(err, user){
+    var query = Thread.find({ownerID: searchUserId})
+    query.exec(function(err, threads){
         if(err){
             console.log("No user with following userID: " + searchUserId)
             return callback("No user with following userID: " + searchUserId, null)
         } else {
-            if(user){
-                console.log("Found userID: " + searchUserId)
-                callback(null, user)
+            if(threads){
+                console.log("Returning threads by user" + searchUserId)
+                callback(null, threads)
             } else {                
                 callback(null, null)
             }
@@ -33,21 +57,21 @@ function findThreadByUserId(searchUserId, callback){
     })
 }
 
-function privateFindUserById(searchUserId, callback){
-    console.log("UserService: find User by ID: " + searchUserId)
-    if(!searchUserId){
-        callback("UserID is missing", null)
+function findThreadById(id, callback){
+    console.log("ThreadService: find Thread by ID: " + id)
+    if(!id){
+        callback("ThreadID is missing", null)
         return;
     }
-    var query = User.findOne({userID: searchUserId}).select("-_id -__v -updatedAt -createdAt")
-    query.exec(function(err, user){
+    var query = Thread.findOne({_id: id})//.select("-password -_id -__v -updatedAt -createdAt")
+    query.exec(function(err, thread){
         if(err){
-            console.log("No user with following userID: " + searchUserId)
-            return callback("No user with following userID: " + searchUserId, null)
+            console.log("No thread with following ID: " + id)
+            return callback("No thread with following ID: " + id, null)
         } else {
-            if(user){
-                console.log("Found userID: " + searchUserId)
-                callback(null, user)
+            if(thread){
+                console.log("Found ID: " + id)
+                callback(null, thread)
             } else {                
                 callback(null, null)
             }
@@ -55,28 +79,26 @@ function privateFindUserById(searchUserId, callback){
     })
 }
 
-function addUser(req, callback){
-    const doc = new User ({
-        id: req.body.id,
-        userID: req.body.userID,
-        userName: req.body.userName,
-        password: req.body.password,
-        isAdministrator: req.body.isAdministrator
+function addThread(req, callback){
+    user = util.readToken(req)
+    const doc = new Thread ({
+        name: req.body.name,
+        description: req.body.description,
+        ownerID: user.userID
     })
-    console.log("to save pw: ", doc.password)
-        doc.save((err, result) => {
-            if (err){
-                callback(err, result)
-            } else if (result){
-                callback(null, result)
-            } else {
-                callback(null, null)
-            }
-        })
+    doc.save((err, result) => {
+        if (err){
+            callback(err, result)
+        } else if (result){
+            callback(null, result)
+        } else {
+            callback(null, null)
+        }
+    })
         
 }
 
-function updateUser(doc, req, callback){
+function updateThread(doc, req, callback){
     Object.assign(doc, req.body)
     doc.save((err, result) => {
         if (err){
@@ -89,8 +111,8 @@ function updateUser(doc, req, callback){
     })
 }
 
-function deleteUser(uID, callback){
-    User.deleteOne({userID: uID}, null, (err, result) => {
+function deleteThread(ID, callback){
+    Thread.deleteOne({id: ID}, null, (err, result) => {
         if(err){
             callback(err, null)
         } else {
@@ -102,8 +124,9 @@ function deleteUser(uID, callback){
 module.exports = {
     getThreads,
     findThreadByUserId,
-    addUser,
-    updateUser,
-    deleteUser,
-    privateFindUserById
+    addThread,
+    updateThread,
+    deleteThread,
+    findUsersThread,
+    findThreadById
 }
