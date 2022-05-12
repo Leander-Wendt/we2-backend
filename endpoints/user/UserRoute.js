@@ -46,6 +46,7 @@ router.post("/", util.isAuthorized, (req, res) => {
                 if(error){
                     res.status(500).json({"Error": error})
                 } else if(resultB){
+                    resultB.password = undefined;
                     res.status(201).json(resultB)
                 } else {
                     res.status(500).json({"Error": "User creation failed"})
