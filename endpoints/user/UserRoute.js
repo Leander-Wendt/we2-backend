@@ -62,7 +62,7 @@ router.put("/:id", util.isAuthorized, (req, res) => {
         return
     }
 
-    userService.findUserById(req.params.id, (err, doc) => {
+    userService.privateFindUserById(req.params.id, (err, doc) => {
         if(err){
             res.status(500).json({"Error": err})
         } else if(!doc){
@@ -72,6 +72,8 @@ router.put("/:id", util.isAuthorized, (req, res) => {
                 if (err){
                     res.status(500).json({"Error": err})
                 } else if (result){
+                    result.password = undefined;
+                    result.__v = undefined;
                     res.status(200).json(result)
                 } else {
                     res.status(500).json({"Error": "User update failed"})

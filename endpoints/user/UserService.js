@@ -60,7 +60,7 @@ function privateFindUserById(searchUserId, callback){
         callback("UserID is missing", null)
         return;
     }
-    var query = User.findOne({userID: searchUserId}).select("-_id -__v -updatedAt -createdAt")
+    var query = User.findOne({userID: searchUserId})
     query.exec(function(err, user){
         if(err){
             console.log("No user with following userID: " + searchUserId)

@@ -30,6 +30,15 @@ http://localhost:8080/users
 Authorization: {{adminToken}}
 
 ###
+PUT http://localhost:8080/users/manfred
+Authorization: {{adminToken}}
+Content-Type: application/json
+
+{
+    "userName": "Manfred Müller"
+}
+
+###
 http://localhost:8080/users/admin
 Authorization: {{adminToken}}
 
