@@ -1,6 +1,7 @@
 var express = require("express")
 var router = express.Router()
 var ForumThreadService = require("./ForumThreadService")
+var ForumMessageService = require("../forumMessage/ForumMessageService")
 var util = require("../../utils/util")
 
 // Read all
@@ -37,7 +38,7 @@ router.get("/myForumThreads", util.isAuthenticated, (req, res) => {
         } else if(result){
             res.status(200).json(result)
         } else {
-            res.status(404).json({"Error": "User with given userID does not exist"})
+            res.status(404).json({"Error": "Thread with given ID does not exist"})
         }
     })
 })
@@ -79,7 +80,7 @@ router.put("/:id", util.isAuthorized, (req, res) => {
         if(err){
             res.status(500).json({"Error": err})
         } else if(!doc){
-            res.status(404).json({"Error": "User with given userID does not exist"})
+            res.status(404).json({"Error": "Thread with given ID does not exist"})
         } else {
             ForumThreadService.updateThread(doc, req, (err, result) => {
                 if (err){
@@ -87,7 +88,7 @@ router.put("/:id", util.isAuthorized, (req, res) => {
                 } else if (result){
                     res.status(200).json(result)
                 } else {
-                    res.status(500).json({"Error": "User update failed"})
+                    res.status(500).json({"Error": "Thread update failed"})
                 }
             })
         }
@@ -101,7 +102,7 @@ router.put("/:id", util.isAuthorized, (req, res) => {
 router.delete("/:id", util.isAuthorized, (req, res) => {
     ForumThreadService.deleteThread(req.params.id, (err, result) => {
         if (err){
-            res.status(500).json({"Error": error})
+            res.status(500).json({"Error": err})
         } else if (result) {
             res.status(204).json({"Success": "Thread succesfully deleted"})
         } else {
@@ -109,5 +110,18 @@ router.delete("/:id", util.isAuthorized, (req, res) => {
         }
     })
 })
+
+router.get("/:id/forumMessages", (req, res) => {
+    ForumMessageService.findMessagesByThreadID(req.params.id, (err, result) => {
+        if(err){
+            res.status(400).json({"Error": err})
+        } else if(result){
+            res.status(200).json(result)
+        } else {
+            res.status(404).json({"Error": "Thread with given ID does not exist"})
+        }
+    })
+})
+
 
 module.exports = router

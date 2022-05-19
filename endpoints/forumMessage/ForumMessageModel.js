@@ -1,10 +1,10 @@
 var mongoose = require('mongoose')
 
 const ForumMessageSchema = new mongoose.Schema({
-    forumThreadID: Number,
+    forumThreadID: String,
     title: String,
     text: String, 
-    authorID: Number
+    authorID: String
 }, { timestamps: true }
 );
 
