@@ -1,6 +1,7 @@
 var express = require("express")
 var router = express.Router()
 var ForumMessageService = require("./ForumMessageService")
+var ForumThreadService = require("../forumThread/ForumThreadService")
 var util = require("../../utils/util")
 
 // Read all
@@ -44,15 +45,22 @@ router.get("/:id", (req, res) => {
 
 // Create
 router.post("/", util.isAuthenticated, (req, res) => {
-    ForumMessageService.addMessage(req, (error, result) => {
-        if(error){
-            res.status(500).json({"Error": error})
-        } else if(result){
-            res.status(201).json(result)
-        } else {
-            res.status(500).json({"Error": "Message creation failed"})
+    ForumThreadService.findThreadById(req.body.forumThreadID, (err, result) => {
+        if (err){
+            res.status(400).json({"Error": err})
         }
-    })
+        if (result){
+            ForumMessageService.addMessage(req, (error, result) => {
+                if(error){
+                    res.status(500).json({"Error": error})
+                } else if(result){
+                    res.status(201).json(result)
+                } else {
+                    res.status(500).json({"Error": "Message creation failed"})
+                }
+            })
+        }
+    })    
 })
 
 // Update
