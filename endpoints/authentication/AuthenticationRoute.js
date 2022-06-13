@@ -5,8 +5,7 @@ var authenticationService = require("./AuthenticationService")
 
 router.get("/", function(req, res, next){
     console.log("Creating login token...")
-
-    if (!req.headers.authorization || req.headers.authorization.indexOf('Basic ') === -1) {
+    if (!req.headers.authorization || req.headers.authorization.indexOf('Basic ') === -1) {        
         res.statusCode = 401;
         res.setHeader('WWW-Authenticate', 'Basic realm="Secure Area"');
         return res.json({ message: 'Missing Authorization Header Gib die daten' });
@@ -20,7 +19,8 @@ router.get("/", function(req, res, next){
                 res.header("Authorization", "Bearer " + token)
 
                 if(user){
-                    res.status(200).json({Success: "Token succesfuly created"})
+                    user.password = undefined 
+                    res.status(200).json(user)
                 } else {
                     console.log("User is null, even though a token has been created. Error: " + err)
                     res.status(200).json({Success: "Token succesfully created"})

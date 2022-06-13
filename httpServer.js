@@ -7,7 +7,7 @@ const fs = require('fs');
 const key = fs.readFileSync('./certificates/key.pem');
 const cert = fs.readFileSync('./certificates/cert.pem');
 
-
+const cors = require("cors")
 
 const publicUsersRoutes = require('./endpoints/user/publicUsersRoute')
 const UserRoutes = require('./endpoints/user/UserRoute')
@@ -20,6 +20,18 @@ const ForumMessagesRoutes = require('./endpoints/forumMessage/ForumMessageRoutes
 const port = 443
 
 const app = express()
+app.use("*", cors())
+app.use(cors({
+    exposedHeaders: ['Authorization'],
+}));
+app.use(function(req, res, next) {
+res.header("Access-Control-Allow-Origin", "*");
+res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+res.header("Access-Control-Expose-Headers","Authorization");
+next();
+});
+
+
 const server = https.createServer({key: key, cert: cert }, app);
 app.use(bodyParser.json())
 
