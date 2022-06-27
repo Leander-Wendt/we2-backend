@@ -5,6 +5,7 @@ var util = require("../../utils/util")
 
 // Read all
 router.get("/", util.isAuthorized, (req, res) => {
+    console.log("Returning all users")
     userService.getUsers((err, result) => {
         if(err){
             res.status(500).json({"Error": err})

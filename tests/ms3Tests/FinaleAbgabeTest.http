@@ -181,3 +181,7 @@ Authorization: {{adminToken}}
 ### Lösche Forum-Thread
 DELETE  https://localhost/forumThreads/{{forumThreadID}}
 Authorization: {{adminToken}}
+
+### Lösche Admin
+DELETE  https://localhost/users/admin
+Authorization: {{adminToken}}
