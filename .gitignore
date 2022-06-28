@@ -1,3 +1,4 @@
 node_modules
 package-lock.json
-*/*.pem
+certificates/key.pem
+certificates/keytmp.pem
