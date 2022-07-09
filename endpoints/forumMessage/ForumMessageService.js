@@ -13,7 +13,7 @@ function getMessages(callback){
 }
 
 function findUsersThread(req, callback){
-    user = util.readToken(req)
+    let user = util.readToken(req)
     console.log("ThreadService: getting all Threads from User: " + user.userName)
     if(!user){
         callback("User is missing", null)
@@ -78,12 +78,12 @@ function findMessageByID(id, callback){
 }
 
 function addMessage(req, callback){
-    user = util.readToken(req)
+    let user = util.readToken(req)
     const doc = new Message ({
         forumThreadID: req.body.forumThreadID,
         title: req.body.title,
         text: req.body.text,
-        authorID: user.authorID
+        authorID: req.body.authorID
     })
     doc.save((err, result) => {
         if (err){
