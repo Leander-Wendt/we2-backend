@@ -6,7 +6,7 @@ var util = require("../../utils/util")
 
 // Read all
 router.get("/", (req, res) => {
-    forumThreadID = req.query.forumThreadID
+    let forumThreadID = req.query.forumThreadID
     if (forumThreadID){
         ForumMessageService.findMessagesByThreadID(forumThreadID, (err, result) => {
             if(err){
